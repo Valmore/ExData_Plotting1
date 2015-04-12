@@ -1,0 +1,41 @@
+##Read the file##
+
+household_power_consumption <- read.csv ("C:/Users/user/Downloads/exdata-data-household_power_con
+sumption/household_power_consumption.txt", sep=";", na.strings="?")
+
+##View File##
+
+View(household_power_consumption)
+
+##Save Raw Data##
+
+rhpc <-(household_power_consumption)
+
+##Subset Data of days 01 and 02 of February 2007##
+
+HPC <- subset(x = rhpc, Date == "1/2/2007" | Date == "2/2/2007")
+
+View(HPC)
+
+##Creates Time Series##
+
+HPC$dateTime <- as.POSIXct(strptime(paste(HPC$Date, HPC$Time), "%d/%m/%Y %H:%M:%S"))
+
+##Plot 4##
+
+par(mfrow=c(2,2))
+par(mar=c(2,2,1,1))
+
+plot(data=HPC, Global_active_power ~ dateTime, type="l", ylab = "Global Active Power", xlab=NA)
+
+plot(data=HPC, Voltage ~ dateTime, type="l", xlab="datetime")
+
+plot(data=HPC, Sub_metering_1 ~ dateTime, type="n", ylab = "Energy sub metering", xlab=NA)
+points(data=HPC, Sub_metering_1 ~ dateTime, type="l", col="black")
+points(data=HPC, Sub_metering_2 ~ dateTime, type="l", col="red")
+points(data=HPC, Sub_metering_3 ~ dateTime, type="l", col="blue")
+legend("topright", legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), col=c("black", "red", "blue"), lwd=1, lty=c(1,1,1), bty="n")
+
+plot(data=HPC, Global_reactive_power ~ dateTime, type="l", xlab="datetime")
+
+dev.off()
